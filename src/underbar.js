@@ -118,19 +118,11 @@ var _ = {};
     return mapped;
   };
 
-  /*
-   * TIP: map is really handy when you want to transform an array of
-   * values into a new array of values. _.pluck() is solved for you
-   * as an example of this.
-   */
 
-  // Takes an array of objects and returns and array of the values of
+  // Takes an array of objects and returns an array of the values of
   // a certain property in it. E.g. take an array of people and return
   // an array of just their ages
   _.pluck = function(collection, key) {
-    // TIP: map is really handy when you want to transform an array of
-    // values into a new array of values. _.pluck() is solved for you
-    // as an example of this.
     return _.map(collection, function(item){
       return item[key];
     });
@@ -139,28 +131,30 @@ var _ = {};
   // Calls the method named by methodName on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+    if (typeof(functionOrKey === "function")){
+      return _.map(collection, function(element){
+        //???
+      });
+    }
+    else if (false){//???
+      return _.map(collection, function(element){
+        //???
+      });
+    }
   };
 
   // Reduces an array or object to a single value by repetitively calling
-  // iterator(previousValue, item) for each item. previousValue should be
-  // the return value of the previous iterator call.
-  //
-  // You can pass in an initialValue that is passed to the first iterator
-  // call. If initialValue is not explicitly passed in, it should default to the
-  // first element in the collection.
-  //
-  // Example:
-  //   var numbers = [1,2,3];
-  //   var sum = _.reduce(numbers, function(total, number){
-  //     return total + number;
-  //   }, 0); // should be 6
+  // iterator(previousValue, item) for each item.
   _.reduce = function(collection, iterator, accumulator) {
+    var accumulator = accumulator || 0
+    _.each(collection, function(element){
+      accumulator = iterator(accumulator, element);
+    });
+    return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
-    // TIP: Many iteration problems can be most easily expressed in
-    // terms of reduce(). Here's a freebie to demonstrate!
     return _.reduce(collection, function(wasFound, item) {
       if (wasFound) {
         return true;
@@ -170,15 +164,34 @@ var _ = {};
   };
 
 
-  // Determine whether all of the elements match a truth test.
+  // Determine whether all of the elements match a truth test.  Yay!
   _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
+    if (iterator === undefined){
+      return _.contains(collection, false) ? false : true
+    }
+     
+    return _.reduce(collection, function(wasFound, item){
+      return wasFound && iterator(item);
+     }, true) ? true : false;
+
   };
 
+  console.log((!{}))
   // Determine whether any of the elements pass a truth test. If no iterator is
-  // provided, provide a default one
+  // provided, 
+  // ****provide a default one**** ?
   _.some = function(collection, iterator) {
+   if (iterator === undefined){
+     return (_.contains(collection, "yes") ? true : false)
+    }
+
+    return !_.every(collection, function(item){
+      return !iterator(item);
+    })
+
+    //return _.contains(_.map(collection, iterator), true) ? true : false;
     // TIP: There's a very clever way to re-use every() here.
+
   };
 
 
