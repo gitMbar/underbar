@@ -39,6 +39,8 @@ var _ = {};
   // Like first, but for the last elements. If n is undefined, return just the
   // last element.
   _.last = function(array, n) {
+    return n === undefined ? array[array.length - 1] : 
+      array.slice(array.length - (n <= array.length ? n : array.length));
   };
 
   // Call iterator(value, key, collection) for each element of collection.
@@ -47,14 +49,21 @@ var _ = {};
   // Note: _.each does not have a return value, but rather simply runs the
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
+    if (Array.isArray(collection)){
+      for (var i = 0; i < collection.length; i++){
+        iterator(collection[i], i, collection);
+      }
+    }
+    else if (typeof collection === "object"){
+      for (i in collection){
+        iterator(collection[i], i, collection);
+      }
+    }
   };
 
   // Returns the index at which value can be found in the array, or -1 if value
   // is not present in the array.
   _.indexOf = function(array, target){
-    // TIP: Here's an example of a function that needs to iterate, which we've
-    // implemented for you. Instead of using a standard `for` loop, though,
-    // it uses the iteration helper `each`, which you will need to write.
     var result = -1;
 
     _.each(array, function(item, index) {
@@ -68,24 +77,45 @@ var _ = {};
 
   // Return all elements of an array that pass a truth test.
   _.filter = function(collection, test) {
+    var filtered = []
+
+    _.each(collection, function(element){
+      if (test(element))
+        filtered.push(element)
+    });
+
+    return filtered;
   };
 
   // Return all elements of an array that don't pass a truth test.
   _.reject = function(collection, test) {
-    // TIP: see if you can re-use _.filter() here, without simply
-    // copying code in and modifying it
+
+    return _.filter(collection, function(element){
+      return test(element) === false;
+    });
   };
 
   // Produce a duplicate-free version of the array.
+  // Acceptable, but instinct says there may be a better way.  Look again if time.
+  // What does "should handle iterators that work with a sorted array" mean?
   _.uniq = function(array) {
+    for (var i = 0; i < array.length; i++){
+      for (var j = i + 1; j < array.length; j++){
+        if (array[j] == array[i])
+          array.splice(j, 1)
+      }
+    }
+    return array;
   };
 
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
-    // map() is a useful primitive iteration function that works a lot
-    // like each(), but in addition to running the operation on all
-    // the members, it also maintains an array of results.
+    var mapped = [];
+    _.each(collection, function(element){
+      mapped.push(iterator(element));
+    })
+    return mapped;
   };
 
   /*
