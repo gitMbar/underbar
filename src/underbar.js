@@ -101,13 +101,14 @@ var _ = {};
   _.uniq = function(array) {
     for (var i = 0; i < array.length; i++){
       for (var j = i + 1; j < array.length; j++){
-        if (array[j] == array[i])
+        if (array[j] == array[i]){
           array.splice(j, 1)
+          j--
+        }
       }
     }
     return array;
   };
-
 
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
