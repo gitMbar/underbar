@@ -132,14 +132,14 @@ var _ = {};
   // Calls the method named by methodName on each value in the list.
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    if (typeof(functionOrKey === "function")){
+    if (typeof(functionOrKey) === "function"){
       return _.map(collection, function(element){
-        //???
+        return functionOrKey.apply(element, args)
       });
     }
-    else if (false){//???
+    else {
       return _.map(collection, function(element){
-        //???
+        return element[functionOrKey](args)
       });
     }
   };
@@ -177,7 +177,6 @@ var _ = {};
 
   };
 
-  console.log((!{}))
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, 
   // ****provide a default one**** ?
